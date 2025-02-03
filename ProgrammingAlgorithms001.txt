@@ -1,0 +1,396 @@
+c語言演算法
+-------------------------------------------------------------
+排序
+ 1. 氣泡排序（Bubble Sort）
+
+    原理：氣泡排序是一種簡單的排序演算法，透過多次比較相鄰元素並交換位置，將較大的元素逐步「冒泡」到數列的末尾。
+    時間複雜度：最壞情況和平均情況是O(n²)，最佳情況是O(n)（當數列已經是有序時）。
+	
+	
+	void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                // 交換元素
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+	}
+	
+
+2. 選擇排序（Selection Sort）
+
+    原理：選擇排序將數列分為已排序區域和未排序區域。
+	每次從未排序區域中選擇最小（或最大）元素，放到已排序區域的末尾。
+    時間複雜度：O(n²)，無論是最佳還是最壞情況。
+	
+	void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        int minIdx = i;
+        for (int j = i+1; j < n; j++) {
+            if (arr[j] < arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        // 交換最小元素
+        int temp = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = temp;
+    }
+    }
+	
+	
+
+3. 插入排序（Insertion Sort）
+
+    原理：插入排序將數列分為已排序區域和未排序區域，每次將未排序區域的第一個元素插入到已排序區域中，保持已排序區域有序。
+    時間複雜度：最壞情況和平均情況是O(n²)，最佳情況是O(n)（當數列已經是有序時）。
+	
+	void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+  }
+	
+
+4. 快速排序（Quick Sort）
+
+    原理：快速排序是一種分治法策略。
+	選擇一個基準元素，將數列分為比基準小的部分和比基準大的部分，再對這兩部分進行遞迴排序。
+    時間複雜度：平均情況是O(n log n)，最壞情況是O(n²)（當數列已經接近有序時）。
+	
+	void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                // 交換元素
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        // 交換基準元素
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        // 進行遞迴
+        quickSort(arr, low, i);
+        quickSort(arr, i + 2, high);
+    }
+    }
+
+5. 堆積排序（Heap Sort）
+
+    原理：堆積排序使用一個堆（通常是最大堆或最小堆）來實現排序。
+	首先構建一個堆，然後反覆將堆的根節點（最大或最小元素）移動到數列的末尾，再調整堆。
+    時間複雜度：O(n log n)，無論是最佳還是最壞情況。
+	
+	void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
+
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        // 交換元素
+        int temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+
+        heapify(arr, n, largest);
+    }
+    }
+
+    void heapSort(int arr[], int n) {
+    // 建立最大堆
+    for (int i = n/2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+
+    // 提取元素
+    for (int i = n - 1; i >= 0; i--) {
+        // 交換根節點和當前元素
+        int temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+
+        heapify(arr, i, 0);
+    }
+    }
+
+
+6. 謝耳排序（Shell Sort）
+
+    原理：謝耳排序是插入排序的改進版，通過比較和交換間隔較大的元素來加速排序過程。
+	逐步縮小間隔，直到間隔為1，這時再進行普通的插入排序。
+    時間複雜度：最壞情況是O(n³/2)，最佳情況是O(n log n)，具體取決於間隔序列。
+	
+	// 謝耳排序函數
+    void shellSort(int arr[], int n) {
+    // 初始間隔為數列長度的一半，逐步減小間隔
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        // 執行插入排序，根據間隔 gap
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j = i;
+            // 插入排序的比較範圍是間隔為 gap 的元素
+            while (j >= gap && arr[j - gap] > temp) {
+                arr[j] = arr[j - gap];
+                j -= gap;
+            }
+            arr[j] = temp;
+        }
+    }
+    }
+
+7. 合併排序（Merge Sort）
+
+    原理：合併排序也是一種分治法。
+	將數列分為兩半，遞迴排序這兩半，然後將已排序的兩半合併成一個有序數列。
+    時間複雜度：O(n log n)，無論是最佳還是最壞情況。
+	
+	
+	void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    int L[n1], R[n2];
+
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+    }
+
+    void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+    }
+
+8. 基數排序（Radix Sort）
+
+    原理：基數排序是一種非比較型排序，通過按位對數字進行排序。
+	從最低位到最高位（或反向）對數字進行排序，並逐位將數字放入適當的位置。
+    時間複雜度：O(nk)，其中n是數字的數量，k是數字的位數。
+
+	// 計算數字中最大的位數
+	int getMax(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+	}
+
+	// 基於某一位進行排序的函數
+	void countSort(int arr[], int n, int exp) {
+    int output[n];  // 排序後的數列
+    int count[10] = {0};  // 記錄每個數字（0-9）的出現次數
+
+    // 計算每個位數的計數
+    for (int i = 0; i < n; i++) {
+        count[(arr[i] / exp) % 10]++;
+    }
+
+    // 改變 count[i] 使它包含每個數字的實際位置
+    for (int i = 1; i < 10; i++) {
+        count[i] += count[i - 1];
+    }
+
+    // 根據計數結果，將數字放到 output 陣列中
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+        count[(arr[i] / exp) % 10]--;
+    }
+
+    // 將排序後的數列複製回原始陣列
+    for (int i = 0; i < n; i++) {
+        arr[i] = output[i];
+    }
+	}
+
+	// 基數排序函數
+	void radixSort(int arr[], int n) {
+    // 找到最大的數字，確定最大位數
+    int max = getMax(arr, n);
+
+    // 根據每一位進行排序（從最低位到最高位）
+    for (int exp = 1; max / exp > 0; exp *= 10) {
+        countSort(arr, n, exp);
+    }
+	}
+	
+	
+搜尋
+ 循序
+   循序搜尋是一種簡單的搜尋演算法，會從資料集的第一個元素開始，逐一檢查每個元素，直到找到目標元素或檢查完整個資料集。
+   
+   int linear_search(int arr[], int size, int target) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == target) {
+            return i;  // 返回索引
+        }
+    }
+    return -1;  // 若找不到，返回 -1
+	}
+ 二分
+   二分搜尋是一種高效的搜尋演算法，必須在已經排序過的資料集上執行。
+   它通過反覆將資料集分為兩半來搜尋目標元素。
+   
+   int binary_search(int arr[], int size, int target) {
+    int low = 0;
+    int high = size - 1;
+    
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        
+        if (arr[mid] == target) {
+            return mid;  // 找到目標，返回索引
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return -1;  // 若找不到，返回 -1
+	}
+ 
+ 二元樹
+   二元樹是一種樹狀結構，每個節點最多有兩個子節點，並且遵循一個規則：左子樹的節點值小於父節點，右子樹的節點值大於父節點。
+   struct TreeNode {
+    int value;
+    struct TreeNode *left;
+    struct TreeNode *right;
+	};
+
+	// 新建節點
+	struct TreeNode* newNode(int value) {
+    struct TreeNode* node = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    node->value = value;
+    node->left = node->right = NULL;
+    return node;
+	}
+
+	// 搜尋二元搜尋樹
+	struct TreeNode* search(struct TreeNode* root, int target) {
+    if (root == NULL || root->value == target) {
+        return root;
+    }
+
+    if (target < root->value) {
+        return search(root->left, target);
+    } else {
+        return search(root->right, target);
+    }
+	}
+ 
+ 內插
+    內插搜尋是一種基於數據分布的搜尋演算法。它根據數字在數據範圍內的位置，估算其可能的位置進行搜尋，對於均勻分布的數據效果最好。
+	int interpolation_search(int arr[], int size, int target) {
+    int low = 0;
+    int high = size - 1;
+
+    while (low <= high && target >= arr[low] && target <= arr[high]) {
+        int pos = low + ((target - arr[low]) * (high - low)) / (arr[high] - arr[low]);
+        
+        if (arr[pos] == target) {
+            return pos;
+        } else if (arr[pos] < target) {
+            low = pos + 1;
+        } else {
+            high = pos - 1;
+        }
+    }
+    return -1;  // 若找不到，返回 -1
+	}
+ 
+ 雜湊
+   雜湊搜尋使用哈希表將資料存儲並加速查詢。哈希表通過將關鍵字映射到表中的索引來實現快速查詢。
+   
+   #define TABLE_SIZE 10
+
+	// 哈希表結構
+	struct HashTable {
+    int* table;
+	};
+
+	// 哈希函數
+	int hash(int key) {
+    return key % TABLE_SIZE;
+	}
+
+	// 創建哈希表
+	struct HashTable* createTable() {
+    struct HashTable* newTable = (struct HashTable*)malloc(sizeof(struct HashTable));
+    newTable->table = (int*)malloc(sizeof(int) * TABLE_SIZE);
+    
+    // 初始化哈希表
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        newTable->table[i] = -1;  // -1 表示空槽
+    }
+    
+    return newTable;
+	}
+
+	// 插入元素
+	void insert(struct HashTable* hashTable, int key) {
+    int index = hash(key);
+    hashTable->table[index] = key;
+	}
+
+	// 查詢元素
+	int search(struct HashTable* hashTable, int key) {
+    int index = hash(key);
+    if (hashTable->table[index] == key) {
+        return index;
+    }
+    return -1;  // 未找到元素
+	}
+
+ 
