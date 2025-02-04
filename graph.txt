@@ -1,0 +1,592 @@
+1. 圖的基本結構
+
+    頂點 (Vertex)：圖中的每個點，表示某個實體。
+    邊 (Edge)：連接兩個頂點的線段，表示這兩個實體之間的關係或互動。
+        有向圖 (Directed Graph)：邊有方向，邊的連接是單向的。
+        無向圖 (Undirected Graph)：邊無方向，邊的連接是雙向的。
+
+2. 圖的分類
+
+    簡單圖 (Simple Graph)：每對頂點之間至多有一條邊，且不含自迴圈。
+    加權圖 (Weighted Graph)：邊有權重，表示邊的成本、距離等。
+    有向無環圖 (Directed Acyclic Graph, DAG)：圖中的邊有方向，且不含環。
+    完全圖 (Complete Graph)：圖中每對頂點都有邊連接。
+	
+顶点 0 的邻接点: 1 4 
+顶点 1 的邻接点: 2 3 
+顶点 2 的邻接点: 
+顶点 3 的邻接点: 4 
+顶点 4 的邻接点: 
+
+0 1 0 0 1 
+0 0 1 1 0 
+0 0 0 0 0 
+0 0 0 0 1 
+0 0 0 0 0 
+	
+
+
+3. 圖的運算與演算法
+
+在圖上，經常會用到一些常見的演算法來解決實際問題。以下是幾個典型的圖演算法：
+1. 深度優先搜尋 (DFS)
+
+    描述：DFS 是一種遍歷或搜尋圖的演算法，透過從某個頂點開始，沿著邊盡可能深入探索，直到無法再深入為止。
+    應用：
+        解決連通性問題，找出圖中是否存在某條路徑。
+        在有向圖中檢查是否存在環。
+        用於拓撲排序（在 DAG 中）。
+		
+	DFS 實現的基本步驟
+    ----------------------------------------------------
+    1.選擇一個起始頂點。
+    2.訪問該頂點，並標記為已訪問。
+    3.遍歷所有與該頂點相連的未訪問的鄰接頂點。
+    4.重複步驟 2 和 3，直到沒有更多未訪問的鄰接頂點。
+    5.回溯到上一個訪問過的節點，繼續搜索其他的鄰接頂點。
+	
+	
+	// Graph represented using adjacency list
+	class Graph {
+	public:
+    int V;  // Number of vertices
+    vector<vector<int>> adj;  // Adjacency list
+
+    // Constructor
+    Graph(int V) {
+        this->V = V;
+        adj.resize(V);
+    }
+
+    // Add an edge to the graph (for undirected graph)
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    // DFS using recursion
+    void DFS_recursive(int start) {
+        vector<bool> visited(V, false);
+        DFS_recursiveHelper(start, visited);
+    }
+
+	private:
+    // Helper function for DFS (recursive)
+    void DFS_recursiveHelper(int node, vector<bool>& visited) {
+        // Mark the current node as visited and print it
+        visited[node] = true;
+        cout << node << " ";
+
+        // Visit all the neighbors of the current node
+        for (int neighbor : adj[node]) {
+            if (!visited[neighbor]) {
+                DFS_recursiveHelper(neighbor, visited);
+            }
+        }
+    }
+	};
+	
+	非遞迴版本的 DFS
+	---------------------------------------------------------------
+	// Graph class remains the same as before
+
+	class Graph {
+	public:
+    int V;  
+    vector<vector<int>> adj;  
+
+    Graph(int V) {
+        this->V = V;
+        adj.resize(V);
+    }
+
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    void DFS_stack(int start) {
+        vector<bool> visited(V, false);
+        stack<int> s;
+        
+        // Start from the given node
+        s.push(start);
+        visited[start] = true;
+
+        while (!s.empty()) {
+            int node = s.top();
+            s.pop();
+            cout << node << " ";
+
+            // Visit all unvisited neighbors
+            for (int neighbor : adj[node]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    s.push(neighbor);
+                }
+            }
+        }
+    }
+	};
+
+2. 廣度優先搜尋 (BFS)
+
+    描述：BFS 是從某個起點頂點開始，探索所有與起點相連的頂點，然後再逐層探索其他頂點。BFS 使用隊列來實現。
+    應用：
+        找最短路徑問題（在無加權圖中）。
+        解決最小生成樹問題。
+        用於社交網絡中的好友推薦。
+		
+	BFS 的基本步驟
+    -------------------------------------------------------------------------------------------------------
+    1.初始化一個空隊列，將起始頂點加入隊列並標記為已訪問。
+    2.重複以下步驟直到隊列為空：
+        從隊列中取出一個頂點，並對它進行處理。
+        將所有未訪問過的鄰接頂點加入隊列並標記為已訪問。
+		
+		
+	// Graph class representing the graph using adjacency list
+	class Graph {
+	public:
+    int V;  // Number of vertices
+    vector<vector<int>> adj;  // Adjacency list
+
+    // Constructor
+    Graph(int V) {
+        this->V = V;
+        adj.resize(V);
+    }
+
+    // Add an edge to the graph (undirected graph)
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    // BFS function to perform breadth-first search starting from 'start'
+    void BFS(int start) {
+        vector<bool> visited(V, false);  // Keep track of visited vertices
+        queue<int> q;  // Queue for BFS
+
+        // Mark the start vertex as visited and enqueue it
+        visited[start] = true;
+        q.push(start);
+
+        // Perform BFS
+        while (!q.empty()) {
+            int node = q.front();  // Get the front of the queue
+            q.pop();  // Remove the front element from the queue
+            cout << node << " ";  // Process the node (print it)
+
+            // Visit all unvisited neighbors of the current node
+            for (int neighbor : adj[node]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;  // Mark as visited
+                    q.push(neighbor);  // Enqueue the neighbor
+                }
+            }
+        }
+    }
+	};
+
+3. 最短路徑演算法
+
+    Dijkstra 演算法：用於有加權圖中找出從一個源點到其他所有點的最短路徑，前提是邊的權重不能為負數。
+	-----------------------------------------------------------------------------------------------
+	
+	typedef pair<int, int> pii; // first: distance, second: vertex
+
+	class Graph {
+	public:
+    int V;  // Number of vertices
+    vector<vector<pii>> adj;  // Adjacency list, pair: {neighbor, weight}
+
+    // Constructor
+    Graph(int V) {
+        this->V = V;
+        adj.resize(V);
+    }
+
+    // Add an edge (u, v) with weight w
+    void addEdge(int u, int v, int w) {
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});  // For undirected graph
+    }
+
+    // Dijkstra's algorithm to find the shortest path from source 'src'
+    void dijkstra(int src) {
+        vector<int> dist(V, INT_MAX);  // Distance array, initialized to INF
+        priority_queue<pii, vector<pii>, greater<pii>> pq;  // Min-heap
+
+        dist[src] = 0;
+        pq.push({0, src});  // Start with the source node, distance 0
+
+        while (!pq.empty()) {
+            int u = pq.top().second;  // Get the node with the minimum distance
+            int d = pq.top().first;   // Distance to the node
+            pq.pop();
+
+            // If the distance is not up-to-date, skip processing
+            if (d > dist[u]) continue;
+
+            // Explore all neighbors of u
+            for (auto& neighbor : adj[u]) {
+                int v = neighbor.first;
+                int weight = neighbor.second;
+
+                // Relax the edge (u, v)
+                if (dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    pq.push({dist[v], v});  // Push the updated distance to the queue
+                }
+            }
+        }
+
+        // Print the shortest distances from the source
+        cout << "Shortest distances from vertex " << src << ":\n";
+        for (int i = 0; i < V; i++) {
+            if (dist[i] == INT_MAX) {
+                cout << "Vertex " << i << ": INF\n";
+            } else {
+                cout << "Vertex " << i << ": " << dist[i] << "\n";
+            }
+        }
+    }
+	};
+
+    Bellman-Ford 演算法：可以處理帶有負權邊的情況，且能夠檢測圖中是否有負權環。
+	----------------------------------------------------------------------------------------
+	
+	struct Edge {
+    int u, v, weight;  // 邊的起點 u、終點 v 和權重 weight
+	};
+
+	class Graph {
+	public:
+    int V, E;  // V 是頂點數，E 是邊數
+    vector<Edge> edges;  // 邊的列表
+
+    // Constructor
+    Graph(int V, int E) {
+        this->V = V;
+        this->E = E;
+    }
+
+    // 添加邊
+    void addEdge(int u, int v, int weight) {
+        edges.push_back({u, v, weight});
+    }
+
+    // Bellman-Ford 演算法
+    void bellmanFord(int src) {
+        vector<int> dist(V, INT_MAX);  // 初始化距離為無窮大
+        dist[src] = 0;  // 源點距離為 0
+
+        // 重複 V-1 次，對所有邊進行松弛操作
+        for (int i = 1; i < V; i++) {
+            for (auto& edge : edges) {
+                int u = edge.u;
+                int v = edge.v;
+                int weight = edge.weight;
+                if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                }
+            }
+        }
+
+        // 檢查是否存在負權環
+        for (auto& edge : edges) {
+            int u = edge.u;
+            int v = edge.v;
+            int weight = edge.weight;
+            if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+                cout << "Graph contains a negative weight cycle!" << endl;
+                return;
+            }
+        }
+
+        // 輸出最短路徑
+        cout << "Shortest distances from vertex " << src << ":\n";
+        for (int i = 0; i < V; i++) {
+            if (dist[i] == INT_MAX) {
+                cout << "Vertex " << i << ": INF\n";
+            } else {
+                cout << "Vertex " << i << ": " << dist[i] << "\n";
+            }
+        }
+    }
+	};
+	
+    Floyd-Warshall 演算法：用於計算任意兩頂點之間的最短路徑。
+	---------------------------------------------------------------------------
+	
+	1.初始化距離矩陣：對於每一對頂點 (i, j)，將其距離設為邊的權重。如果頂點間沒有邊相連，則設為無窮大。
+	2.動態更新最短路徑：對於每一個中介頂點 k，檢查是否可以通過 k 來縮短從頂點 i 到頂點 j 的最短路徑。
+	若 dist[i][j] > dist[i][k] + dist[k][j]，則更新 dist[i][j]。
+	3.重複上述步驟，直到所有的最短路徑都被確定。
+	
+	class Graph {
+	public:
+    int V;  // 顶点数
+    vector<vector<int>> dist;  // 距离矩阵
+
+    // 构造函数
+    Graph(int V) {
+        this->V = V;
+        dist.resize(V, vector<int>(V, INT_MAX));  // 初始化距离矩阵为无穷大
+        for (int i = 0; i < V; ++i) {
+            dist[i][i] = 0;  // 每个节点到自己的距离为0
+        }
+    }
+
+    // 添加边
+    void addEdge(int u, int v, int weight) {
+        dist[u][v] = weight;
+    }
+
+    // Floyd-Warshall 算法
+    void floydWarshall() {
+        // 逐个考虑每一个中介点 k
+        for (int k = 0; k < V; ++k) {
+            for (int i = 0; i < V; ++i) {
+                for (int j = 0; j < V; ++j) {
+                    // 如果通过 k 点能缩短路径，则更新距离
+                    if (dist[i][k] != INT_MAX && dist[k][j] != INT_MAX &&
+                        dist[i][j] > dist[i][k] + dist[k][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+    }
+
+    // 输出最短路径矩阵
+    void printSolution() {
+        cout << "Shortest distances between every pair of vertices:\n";
+        for (int i = 0; i < V; ++i) {
+            for (int j = 0; j < V; ++j) {
+                if (dist[i][j] == INT_MAX) {
+                    cout << "INF ";
+                } else {
+                    cout << dist[i][j] << " ";
+                }
+            }
+            cout << endl;
+        }
+    }
+	};
+
+4. 最小生成樹 (MST) 演算法
+
+    Kruskal 演算法：從邊的權重最小的邊開始選擇，並且不會形成環，直到連接所有頂點。
+	--------------------------------------------------------------------------------------
+	
+	// 邊的結構體
+	struct Edge {
+    int u, v, weight;  // 起點 u，終點 v，權重 weight
+	};
+
+	// 比較兩條邊的權重，用於排序
+	bool compare(Edge a, Edge b) {
+    return a.weight < b.weight;
+	}
+
+	// 並查集（Union-Find）類別
+	class UnionFind {
+	public:
+    vector<int> parent, rank;
+
+    // 构造函数
+    UnionFind(int n) {
+        parent.resize(n);
+        rank.resize(n, 0);
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;  // 初始時，每個節點的父節點是它自己
+        }
+    }
+
+    // 查找根節點（帶路徑壓縮）
+    int find(int u) {
+        if (parent[u] != u) {
+            parent[u] = find(parent[u]);  // 路徑壓縮
+        }
+        return parent[u];
+    }
+
+    // 合併兩個集合（帶按秩合併）
+    void unionSets(int u, int v) {
+        int rootU = find(u);
+        int rootV = find(v);
+        if (rootU != rootV) {
+            if (rank[rootU] > rank[rootV]) {
+                parent[rootV] = rootU;
+            } else if (rank[rootU] < rank[rootV]) {
+                parent[rootU] = rootV;
+            } else {
+                parent[rootV] = rootU;
+                rank[rootU]++;
+            }
+        }
+    }
+	};
+
+	// Kruskal 演算法求最小生成樹
+	vector<Edge> kruskal(int V, vector<Edge>& edges) {
+    // 按權重排序所有邊
+    sort(edges.begin(), edges.end(), compare);
+
+    UnionFind uf(V);
+    vector<Edge> mst;  // 存儲最小生成樹的邊
+
+    for (auto& edge : edges) {
+        // 如果這條邊的兩端不在同一個集合中，則加入最小生成樹
+        if (uf.find(edge.u) != uf.find(edge.v)) {
+            uf.unionSets(edge.u, edge.v);
+            mst.push_back(edge);
+        }
+    }
+
+    return mst;
+	}
+
+	
+    Prim 演算法：從一個起點開始，不斷選擇權重最小的邊來擴展樹，直到包含所有頂點。
+	----------------------------------------------------------------------------------------
+	
+	class Graph {
+	public:
+    int V;  // 顶点数
+    vector<vector<pair<int, int>>> adj;  // 邻接表，存储每个节点的邻接节点和边的权重
+
+    // 构造函数
+    Graph(int V) {
+        this->V = V;
+        adj.resize(V);
+    }
+
+    // 添加边
+    void addEdge(int u, int v, int weight) {
+        adj[u].push_back({v, weight});
+        adj[v].push_back({u, weight});  // 无向图，反向边也添加
+    }
+
+    // Prim 算法
+    int prim() {
+        vector<int> key(V, INT_MAX);  // 存储每个顶点的最小边的权重
+        vector<bool> inMST(V, false);  // 判断顶点是否在最小生成树中
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;  // 最小堆，存储 {权重, 顶点} 对
+
+        key[0] = 0;  // 从第一个顶点开始
+        pq.push({0, 0});  // 初始将第一个顶点加入堆
+
+        int mstWeight = 0;  // 最小生成树的总权重
+
+        while (!pq.empty()) {
+            int u = pq.top().second;  // 取出权重最小的顶点
+            pq.pop();
+
+            if (inMST[u]) continue;  // 如果顶点已经在最小生成树中，则跳过
+            inMST[u] = true;  // 将顶点 u 加入最小生成树
+            mstWeight += key[u];  // 累加该边的权重
+
+            // 遍历 u 的邻接点
+            for (auto& edge : adj[u]) {
+                int v = edge.first;  // 邻接点
+                int weight = edge.second;  // 边的权重
+
+                // 如果 v 不在最小生成树中，且存在比当前权重更小的边，则更新
+                if (!inMST[v] && weight < key[v]) {
+                    key[v] = weight;
+                    pq.push({key[v], v});  // 更新堆
+                }
+            }
+        }
+
+        return mstWeight;
+    }
+	};
+	
+
+5. 拓撲排序 (Topological Sort)
+
+    描述：拓撲排序是一種對有向無環圖 (DAG) 的頂點進行排序的方式，使得對每一條邊 (u, v)，頂點 u 排在 v 之前。
+    應用：常用於解決任務調度問題，或分析系統中的依賴關係。
+	
+	class Graph {
+	public:
+    int V;  // 頂點數
+    vector<vector<int>> adj;  // 邊的鄰接表
+
+    // 构造函数
+    Graph(int V) {
+        this->V = V;
+        adj.resize(V);
+    }
+
+    // 添加有向邊
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+    }
+
+    // 拓撲排序 (Kahn 算法)
+    bool topologicalSort() {
+        vector<int> inDegree(V, 0);  // 記錄每個頂點的入度
+
+        // 計算每個頂點的入度
+        for (int u = 0; u < V; ++u) {
+            for (int v : adj[u]) {
+                inDegree[v]++;
+            }
+        }
+
+        queue<int> q;
+        // 將所有入度為 0 的頂點放入隊列
+        for (int i = 0; i < V; ++i) {
+            if (inDegree[i] == 0) {
+                q.push(i);
+            }
+        }
+
+        vector<int> topoOrder;  // 儲存拓撲排序結果
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            topoOrder.push_back(u);
+
+            // 對 u 的所有相鄰頂點，將其入度減 1，並檢查是否入度為 0
+            for (int v : adj[u]) {
+                inDegree[v]--;
+                if (inDegree[v] == 0) {
+                    q.push(v);
+                }
+            }
+        }
+
+        // 檢查是否所有頂點都被處理過
+        if (topoOrder.size() != V) {
+            cout << "圖中存在環，無法進行拓撲排序。" << endl;
+            return false;
+        }
+
+        // 輸出拓撲排序結果
+        cout << "拓撲排序結果：";
+        for (int i : topoOrder) {
+            cout << i << " ";
+        }
+        cout << endl;
+        return true;
+    }
+	};
+
+4. 圖的應用
+
+圖演算法在許多領域都有重要應用。
+以下是幾個常見的應用場景：
+    社交網絡分析：社交網絡中的用戶和他們之間的互動可以用圖來表示。
+	圖演算法可以用於推薦朋友、分析社群結構、發現影響力最大的用戶等。
+    導航系統：城市的道路網絡、航路、火車路線等都可以看作是加權圖，圖演算法（如 Dijkstra 演算法）可以用來尋找最短路徑。
+    電路設計與分析：在電子電路中，元件（如電阻、電容）可以被視為圖的頂點，元件之間的連接被視為邊。
+	拓撲排序和最短路徑演算法在電路設計中經常使用。
+    網絡路由：網絡的路由選擇也可以用圖來建模，通過最短路徑演算法來確定資料傳送的最優路徑。
+    生物信息學：基因和蛋白質之間的相互作用可以用圖來表示，通過圖演算法來分析生物體內部的複雜關係。
+	
