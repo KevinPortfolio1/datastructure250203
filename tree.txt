@@ -1,0 +1,526 @@
+樹狀結構（Tree Structure）
+-----------------------------------------------------------------------------------
+是計算機科學中常見的資料結構，它由一系列節點（Node）所組成，並且有明確的層級關係
+
+樹的類型
+
+    二元樹 (Binary Tree): 每個節點最多有兩個子節點。
+    二元搜尋樹 (Binary Search Tree, BST): 左子樹的值小於父節點，右子樹的值大於父節點。
+    平衡樹 (Balanced Tree): 樹的高度被控制在一定範圍內，避免樹過於傾斜（如 AVL 樹）。
+    堆疊樹 (Heap Tree): 特定的完全二元樹，通常分為最大堆（Max-Heap）和最小堆（Min-Heap）。
+	
+	
+-------------------------------------------------------------------------------------------
+class BinaryTree {
+    TreeNode root; // 樹的根節點
+
+    // 建構子
+    public BinaryTree() {
+        root = null;
+    }
+
+    // 插入操作
+    public void insert(int value) {
+        root = insertRec(root, value);
+    }
+
+    // 遞迴的插入方法
+    private TreeNode insertRec(TreeNode root, int value) {
+        // 如果樹為空，建立新的節點
+        if (root == null) {
+            root = new TreeNode(value);
+            return root;
+        }
+
+        // 否則，根據值插入到左子樹或右子樹
+        if (value < root.value) {
+            root.left = insertRec(root.left, value);
+        } else if (value > root.value) {
+            root.right = insertRec(root.right, value);
+        }
+
+        return root;
+    }
+
+    // 搜尋操作
+    public boolean search(int value) {
+        return searchRec(root, value);
+    }
+
+    // 遞迴搜尋方法
+    private boolean searchRec(TreeNode root, int value) {
+        // 基本情況：如果樹為空或找到值
+        if (root == null) {
+            return false;
+        }
+        if (root.value == value) {
+            return true;
+        }
+
+        // 根據值決定搜尋左子樹還是右子樹
+        if (value < root.value) {
+            return searchRec(root.left, value);
+        } else {
+            return searchRec(root.right, value);
+        }
+    }
+
+    // 中序遍歷（In-order Traversal）
+    public void inorder() {
+        inorderRec(root);
+    }
+
+    // 遞迴中序遍歷方法
+    private void inorderRec(TreeNode root) {
+        if (root != null) {
+            inorderRec(root.left); // 遍歷左子樹
+            System.out.print(root.value + " "); // 訪問根節點
+            inorderRec(root.right); // 遍歷右子樹
+        }
+    }
+
+    // 前序遍歷（Pre-order Traversal）
+    public void preorder() {
+        preorderRec(root);
+    }
+
+    private void preorderRec(TreeNode root) {
+        if (root != null) {
+            System.out.print(root.value + " ");
+            preorderRec(root.left);
+            preorderRec(root.right);
+        }
+    }
+
+    // 後序遍歷（Post-order Traversal）
+    public void postorder() {
+        postorderRec(root);
+    }
+
+    private void postorderRec(TreeNode root) {
+        if (root != null) {
+            postorderRec(root.left);
+            postorderRec(root.right);
+            System.out.print(root.value + " ");
+        }
+    }
+}
+
+-------------------------------------------------------------------------------------------
+class BinarySearchTree {
+    TreeNode root; // 樹的根節點
+
+    // 建構子
+    public BinarySearchTree() {
+        root = null;
+    }
+
+    // 插入操作
+    public void insert(int value) {
+        root = insertRec(root, value);
+    }
+
+    // 遞迴插入方法
+    private TreeNode insertRec(TreeNode root, int value) {
+        // 如果樹為空，建立新的節點
+        if (root == null) {
+            root = new TreeNode(value);
+            return root;
+        }
+
+        // 根據值插入到左子樹或右子樹
+        if (value < root.value) {
+            root.left = insertRec(root.left, value); // 插入到左子樹
+        } else if (value > root.value) {
+            root.right = insertRec(root.right, value); // 插入到右子樹
+        }
+
+        return root;
+    }
+
+    // 搜尋操作
+    public boolean search(int value) {
+        return searchRec(root, value);
+    }
+
+    // 遞迴搜尋方法
+    private boolean searchRec(TreeNode root, int value) {
+        // 基本情況：如果樹為空或找到值
+        if (root == null) {
+            return false;
+        }
+        if (root.value == value) {
+            return true;
+        }
+
+        // 根據值決定搜尋左子樹還是右子樹
+        if (value < root.value) {
+            return searchRec(root.left, value);
+        } else {
+            return searchRec(root.right, value);
+        }
+    }
+
+    // 刪除操作
+    public void delete(int value) {
+        root = deleteRec(root, value);
+    }
+
+    // 遞迴刪除方法
+    private TreeNode deleteRec(TreeNode root, int value) {
+        // 如果樹為空，直接返回
+        if (root == null) {
+            return root;
+        }
+
+        // 根據值決定刪除左子樹還是右子樹
+        if (value < root.value) {
+            root.left = deleteRec(root.left, value);
+        } else if (value > root.value) {
+            root.right = deleteRec(root.right, value);
+        } else {
+            // 節點找到後，進行刪除操作
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+
+            // 如果有兩個子節點，找到中序後繼（右子樹的最小節點）
+            root.value = minValue(root.right);
+
+            // 刪除中序後繼
+            root.right = deleteRec(root.right, root.value);
+        }
+
+        return root;
+    }
+
+    // 找到最小值節點
+    private int minValue(TreeNode root) {
+        int minValue = root.value;
+        while (root.left != null) {
+            minValue = root.left.value;
+            root = root.left;
+        }
+        return minValue;
+    }
+
+    // 中序遍歷（In-order Traversal）
+    public void inorder() {
+        inorderRec(root);
+    }
+
+    // 遞迴中序遍歷方法
+    private void inorderRec(TreeNode root) {
+        if (root != null) {
+            inorderRec(root.left); // 遍歷左子樹
+            System.out.print(root.value + " "); // 訪問根節點
+            inorderRec(root.right); // 遍歷右子樹
+        }
+    }
+
+    // 前序遍歷（Pre-order Traversal）
+    public void preorder() {
+        preorderRec(root);
+    }
+
+    private void preorderRec(TreeNode root) {
+        if (root != null) {
+            System.out.print(root.value + " ");
+            preorderRec(root.left);
+            preorderRec(root.right);
+        }
+    }
+
+    // 後序遍歷（Post-order Traversal）
+    public void postorder() {
+        postorderRec(root);
+    }
+
+    private void postorderRec(TreeNode root) {
+        if (root != null) {
+            postorderRec(root.left);
+            postorderRec(root.right);
+            System.out.print(root.value + " ");
+        }
+    }
+}
+
+
+插入：insertRec 方法會將新值插入樹中，根據二元搜尋樹的規則，將值比較後放入左邊或右邊。
+搜尋：searchRec 方法會遞迴地搜尋指定值，並返回是否存在。
+刪除：deleteRec 方法會根據指定的刪除規則處理：
+
+    如果節點沒有子節點，直接刪除。
+    如果節點只有一個子節點，用子節點取代該節點。
+    如果節點有兩個子節點，找到中序後繼節點（右子樹中的最小值），並將其值替換到當前節點，再刪除中序後繼節點。
+
+遍歷：提供中序、前序和後序的遍歷方法，用於列出樹中的所有節點。
+
+
+----------------------------------------------------------------------------------------------------------------
+class AVLTree {
+    TreeNode root; // 樹的根節點
+
+    public AVLTree() {
+        root = null;
+    }
+
+    // 獲取節點的高度
+    private int height(TreeNode node) {
+        return node == null ? 0 : node.height;
+    }
+
+    // 計算節點的平衡因子
+    private int balanceFactor(TreeNode node) {
+        return node == null ? 0 : height(node.left) - height(node.right);
+    }
+
+    // 更新節點的高度
+    private void updateHeight(TreeNode node) {
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+    }
+
+    // 右旋操作
+    private TreeNode rightRotate(TreeNode y) {
+        TreeNode x = y.left;
+        TreeNode T2 = x.right;
+
+        // 旋轉
+        x.right = y;
+        y.left = T2;
+
+        // 更新高度
+        updateHeight(y);
+        updateHeight(x);
+
+        return x;
+    }
+
+    // 左旋操作
+    private TreeNode leftRotate(TreeNode x) {
+        TreeNode y = x.right;
+        TreeNode T2 = y.left;
+
+        // 旋轉
+        y.left = x;
+        x.right = T2;
+
+        // 更新高度
+        updateHeight(x);
+        updateHeight(y);
+
+        return y;
+    }
+
+    // 插入節點
+    public void insert(int value) {
+        root = insertRec(root, value);
+    }
+
+    private TreeNode insertRec(TreeNode node, int value) {
+        // 插入新節點
+        if (node == null) {
+            return new TreeNode(value);
+        }
+
+        // 插入到左子樹或右子樹
+        if (value < node.value) {
+            node.left = insertRec(node.left, value);
+        } else if (value > node.value) {
+            node.right = insertRec(node.right, value);
+        } else {
+            return node; // 不允許插入重複值
+        }
+
+        // 更新節點高度
+        updateHeight(node);
+
+        // 計算平衡因子，並進行旋轉操作
+        int balance = balanceFactor(node);
+
+        // 左左情況
+        if (balance > 1 && value < node.left.value) {
+            return rightRotate(node);
+        }
+
+        // 右右情況
+        if (balance < -1 && value > node.right.value) {
+            return leftRotate(node);
+        }
+
+        // 左右情況
+        if (balance > 1 && value > node.left.value) {
+            node.left = leftRotate(node.left);
+            return rightRotate(node);
+        }
+
+        // 右左情況
+        if (balance < -1 && value < node.right.value) {
+            node.right = rightRotate(node.right);
+            return leftRotate(node);
+        }
+
+        return node;
+    }
+
+    // 中序遍歷（In-order Traversal）
+    public void inorder() {
+        inorderRec(root);
+    }
+
+    private void inorderRec(TreeNode node) {
+        if (node != null) {
+            inorderRec(node.left);
+            System.out.print(node.value + " ");
+            inorderRec(node.right);
+        }
+    }
+
+    // 前序遍歷（Pre-order Traversal）
+    public void preorder() {
+        preorderRec(root);
+    }
+
+    private void preorderRec(TreeNode node) {
+        if (node != null) {
+            System.out.print(node.value + " ");
+            preorderRec(node.left);
+            preorderRec(node.right);
+        }
+    }
+
+    // 後序遍歷（Post-order Traversal）
+    public void postorder() {
+        postorderRec(root);
+    }
+
+    private void postorderRec(TreeNode node) {
+        if (node != null) {
+            postorderRec(node.left);
+            postorderRec(node.right);
+            System.out.print(node.value + " ");
+        }
+    }
+}
+
+---------------------------------------------------------------------------------------------
+max heap
+
+-----------
+class MaxHeap {
+    private int[] heap; // 儲存堆元素的陣列
+    private int size; // 堆的大小
+    private int capacity; // 堆的容量
+
+    public MaxHeap(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        heap = new int[capacity];
+    }
+
+    // 父節點的索引
+    private int parent(int i) {
+        return (i - 1) / 2;
+    }
+
+    // 左子節點的索引
+    private int left(int i) {
+        return 2 * i + 1;
+    }
+
+    // 右子節點的索引
+    private int right(int i) {
+        return 2 * i + 2;
+    }
+
+    // 插入一個新元素
+    public void insert(int key) {
+        if (size == capacity) {
+            System.out.println("堆已滿，無法插入");
+            return;
+        }
+
+        // 將新元素插入堆的最後
+        heap[size] = key;
+        size++;
+
+        // 通過上浮操作維護堆的性質
+        int i = size - 1;
+        while (i != 0 && heap[parent(i)] < heap[i]) {
+            // 交換元素
+            swap(i, parent(i));
+            i = parent(i);
+        }
+    }
+
+    // 刪除堆的根元素（即最大元素）
+    public void remove() {
+        if (size <= 0) {
+            System.out.println("堆已空，無法刪除");
+            return;
+        }
+
+        if (size == 1) {
+            size--;
+            return;
+        }
+
+        // 將根節點與最後一個節點交換
+        heap[0] = heap[size - 1];
+        size--;
+
+        // 堆化根節點
+        heapify(0);
+    }
+
+    // 堆化過程，維護最大堆的性質
+    private void heapify(int i) {
+        int largest = i;
+        int left = left(i);
+        int right = right(i);
+
+        // 找到最大值的位置
+        if (left < size && heap[left] > heap[largest]) {
+            largest = left;
+        }
+
+        if (right < size && heap[right] > heap[largest]) {
+            largest = right;
+        }
+
+        // 如果最大值不是當前節點，交換並遞迴堆化
+        if (largest != i) {
+            swap(i, largest);
+            heapify(largest);
+        }
+    }
+
+    // 交換兩個元素的位置
+    private void swap(int i, int j) {
+        int temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
+    }
+
+    // 顯示堆的內容
+    public void display() {
+        for (int i = 0; i < size; i++) {
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
+    }
+
+    // 取得堆的大小
+    public int getSize() {
+        return size;
+    }
+
+    // 取得堆的根元素
+    public int getMax() {
+        return size > 0 ? heap[0] : Integer.MIN_VALUE;
+    }
+}
+
+
