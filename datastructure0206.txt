@@ -1,0 +1,372 @@
+串列
+-------------------
+用來儲存多個元素的資料結構，它可以儲存各種不同型別的資料（例如整數、字串、浮點數等），並且允許你對這些元素進行各種操作
+
+1. 創建串列
+
+# 空串列
+my_list = []
+
+# 有元素的串列
+fruits = ['apple', 'banana', 'cherry']
+
+# 混合型別的串列
+mixed_list = [1, 'hello', 3.14, True]
+
+2. 存取元素
+
+可以使用索引來存取串列中的元素，索引從 0 開始。
+
+fruits = ['apple', 'banana', 'cherry']
+
+# 存取第一個元素
+print(fruits[0])  # 輸出 'apple'
+
+# 存取倒數第二個元素
+print(fruits[-2])  # 輸出 'banana'
+
+3. 修改元素
+
+你可以修改串列中的元素。
+
+fruits = ['apple', 'banana', 'cherry']
+
+# 修改第二個元素
+fruits[1] = 'blueberry'
+print(fruits)  # 輸出 ['apple', 'blueberry', 'cherry']
+
+4. 新增元素
+
+可以使用 append()、insert() 等方法來新增元素。
+
+fruits = ['apple', 'banana', 'cherry']
+
+# 使用 append() 新增元素到串列的末尾
+fruits.append('orange')
+print(fruits)  # 輸出 ['apple', 'banana', 'cherry', 'orange']
+
+# 使用 insert() 在指定位置插入元素
+fruits.insert(1, 'grape')
+print(fruits)  # 輸出 ['apple', 'grape', 'banana', 'cherry', 'orange']
+
+5. 刪除元素
+
+可以使用 remove()、pop()、del 等方法來刪除元素。
+
+fruits = ['apple', 'banana', 'cherry', 'orange']
+
+# 使用 remove() 刪除指定元素
+fruits.remove('banana')
+print(fruits)  # 輸出 ['apple', 'cherry', 'orange']
+
+# 使用 pop() 刪除並返回指定位置的元素（默認是最後一個）
+last_fruit = fruits.pop()
+print(last_fruit)  # 輸出 'orange'
+print(fruits)  # 輸出 ['apple', 'cherry']
+
+# 使用 del 刪除指定位置的元素
+del fruits[0]
+print(fruits)  # 輸出 ['cherry']
+
+6. 切片操作
+
+你可以使用切片來獲取串列的一部分。
+
+fruits = ['apple', 'banana', 'cherry', 'orange', 'grape']
+
+# 獲取從索引 1 到 3（不包括 3）的元素
+print(fruits[1:3])  # 輸出 ['banana', 'cherry']
+
+# 獲取從索引 2 到結尾的元素
+print(fruits[2:])  # 輸出 ['cherry', 'orange', 'grape']
+
+# 獲取整個串列
+print(fruits[:])  # 輸出 ['apple', 'banana', 'cherry', 'orange', 'grape']
+
+7. 串列長度
+
+可以使用 len() 函數來獲取串列的長度。
+
+fruits = ['apple', 'banana', 'cherry']
+print(len(fruits))  # 輸出 3
+-------------------
+佇列
+-------------------
+遵循 先進先出（FIFO） 的原則，意思是最先進入佇列的元素會最先被移除。
+佇列常用於處理需要按順序處理的資料，例如在作業系統中處理任務排隊、網路封包的處理等。
+
+1. 使用列表來實現佇列
+
+# 使用列表來模擬佇列
+queue = []
+
+# enqueue: 添加元素到佇列的末尾
+queue.append(1)
+queue.append(2)
+queue.append(3)
+
+print(f"佇列：{queue}")  # 輸出: [1, 2, 3]
+
+# dequeue: 移除並返回佇列最前端的元素
+first_item = queue.pop(0)
+print(f"出隊元素：{first_item}")  # 輸出: 1
+print(f"佇列：{queue}")  # 輸出: [2, 3]
+
+# 檢視最前端元素（但不移除）
+front_item = queue[0]
+print(f"最前端元素：{front_item}")  # 輸出: 2
+
+# 檢查佇列是否為空
+is_empty = len(queue) == 0
+print(f"佇列是否為空：{is_empty}")  # 輸出: False
+
+2. 使用 collections.deque 來實現佇列
+
+deque 是 Python 標準庫中的一個雙端佇列，它支持在兩端高效地插入和刪除元素，對於模擬佇列（FIFO）來說，比使用列表更高效。
+
+from collections import deque
+
+# 創建空的 deque 作為佇列
+queue = deque()
+
+# enqueue: 添加元素到佇列的末尾
+queue.append(1)
+queue.append(2)
+queue.append(3)
+
+print(f"佇列：{queue}")  # 輸出: deque([1, 2, 3])
+
+# dequeue: 移除並返回佇列最前端的元素
+first_item = queue.popleft()
+print(f"出隊元素：{first_item}")  # 輸出: 1
+print(f"佇列：{queue}")  # 輸出: deque([2, 3])
+
+# 檢視最前端元素（但不移除）
+front_item = queue[0]
+print(f"最前端元素：{front_item}")  # 輸出: 2
+
+# 檢查佇列是否為空
+is_empty = len(queue) == 0
+print(f"佇列是否為空：{is_empty}")  # 輸出: False
+
+3. 使用 queue.Queue 來實現佇列
+
+如果你需要在多線程環境中使用佇列，則可以使用 queue.Queue。這個佇列是線程安全的，可以在多線程中使用。
+
+import queue
+
+# 創建一個空的佇列
+q = queue.Queue()
+
+# enqueue: 添加元素到佇列的末尾
+q.put(1)
+q.put(2)
+q.put(3)
+
+# 檢查佇列是否為空
+print(f"佇列是否為空：{q.empty()}")  # 輸出: False
+
+# dequeue: 移除並返回佇列最前端的元素
+first_item = q.get()
+print(f"出隊元素：{first_item}")  # 輸出: 1
+
+# 檢查佇列的大小
+print(f"佇列大小：{q.qsize()}")  # 輸出: 2
+
+佇列的應用範例：任務排隊
+
+假設我們有一個工作排隊系統，每個工作被放入佇列，並按順序進行處理。這是一個使用佇列模擬任務排隊的範例：
+
+from collections import deque
+
+# 模擬工作任務排隊
+task_queue = deque()
+
+# 模擬一些任務
+task_queue.append("Task 1")
+task_queue.append("Task 2")
+task_queue.append("Task 3")
+
+# 處理任務
+while task_queue:
+    task = task_queue.popleft()  # 出隊處理任務
+    print(f"處理 {task}")  # 輸出: 處理 Task 1, 處理 Task 2, 處理 Task 3
+-------------------
+堆疊
+-------------------
+遵循 後進先出（LIFO, Last In, First Out） 原則的資料結構，
+意味著最先進入堆疊的元素會最後被移除，而最後進入堆疊的元素會最先被移除
+
+使用列表實現堆疊
+
+# 創建一個空堆疊
+stack = []
+
+# push: 添加元素到堆疊頂端
+stack.append(1)
+stack.append(2)
+stack.append(3)
+
+print(f"堆疊：{stack}")  # 輸出: [1, 2, 3]
+
+# pop: 移除並返回堆疊頂端的元素
+top_item = stack.pop()
+print(f"出堆元素：{top_item}")  # 輸出: 3
+print(f"堆疊：{stack}")  # 輸出: [1, 2]
+
+# 檢視堆疊頂端的元素（但不移除）
+top_item = stack[-1]
+print(f"堆疊頂端元素：{top_item}")  # 輸出: 2
+
+# 檢查堆疊是否為空
+is_empty = len(stack) == 0
+print(f"堆疊是否為空：{is_empty}")  # 輸出: False
+
+# 堆疊的大小
+print(f"堆疊大小：{len(stack)}")  # 輸出: 2
+
+使用 collections.deque 實現堆疊
+
+雖然可以用列表來實現堆疊，但在性能方面，deque 是一個更好的選擇，
+因為它在兩端的操作（append() 和 pop()）效率更高，特別是在涉及大量資料時。
+
+from collections import deque
+
+# 創建空的 deque 作為堆疊
+stack = deque()
+
+# push: 添加元素到堆疊頂端
+stack.append(1)
+stack.append(2)
+stack.append(3)
+
+print(f"堆疊：{stack}")  # 輸出: deque([1, 2, 3])
+
+# pop: 移除並返回堆疊頂端的元素
+top_item = stack.pop()
+print(f"出堆元素：{top_item}")  # 輸出: 3
+print(f"堆疊：{stack}")  # 輸出: deque([1, 2])
+
+# 檢視堆疊頂端的元素（但不移除）
+top_item = stack[-1]
+print(f"堆疊頂端元素：{top_item}")  # 輸出: 2
+
+# 檢查堆疊是否為空
+is_empty = len(stack) == 0
+print(f"堆疊是否為空：{is_empty}")  # 輸出: False
+
+# 堆疊的大小
+print(f"堆疊大小：{len(stack)}")  # 輸出: 2
+
+堆疊的應用範例：括號配對
+
+一個經典的堆疊應用是括號配對問題，該問題要求檢查一個字串中的括號是否正確配對。
+
+def is_balanced(s):
+    stack = deque()
+    # 遍歷字串中的每個字符
+    for char in s:
+        if char == '(':
+            stack.append(char)  # 遇到左括號入堆
+        elif char == ')':
+            if not stack:
+                return False  # 如果堆疊為空，說明沒有左括號配對
+            stack.pop()  # 遇到右括號，出堆頂元素配對
+    return not stack  # 如果堆疊為空，說明括號配對成功
+
+# 測試
+print(is_balanced("()"))  # 輸出: True
+print(is_balanced("(()())"))  # 輸出: True
+print(is_balanced("((())"))  # 輸出: False
+-------------------
+陣列
+-------------------
+靜態陣列與動態陣列的區別
+
+    靜態陣列（Static Array）:
+        一旦創建，其大小在創建時就已經固定。無法在運行時修改其大小。
+        優點：存取速度快，因為內部資料結構不需要重新配置。
+        缺點：缺乏彈性，無法動態改變大小。
+
+    動態陣列（Dynamic Array）:
+        可以在運行時改變大小。這是 Python 中的 list 內建資料結構，會根據需求動態增長或縮小。
+        優點：更靈活，適應大小變化。
+        缺點：因為需要在擴展陣列時重新配置內部記憶體，會有額外的開銷。
+		
+靜態陣列的實現
+
+在 Python 中，靜態陣列可以透過 array 模組來實現。這個模組提供了一個高效的方式來存儲同一型別的資料。
+
+import array
+
+# 創建靜態陣列，指定資料型別為整數 ('i' 代表整數型別)
+arr = array.array('i', [1, 2, 3, 4, 5])
+
+# 存取元素
+print(arr[0])  # 輸出: 1
+
+# 修改元素
+arr[2] = 10
+print(arr)  # 輸出: array('i', [1, 2, 10, 4, 5])
+
+# 嘗試動態添加元素會失敗，因為陣列的大小是固定的
+# arr.append(6)  # 將會出現錯誤，因為大小固定
+
+動態陣列的實現（Python list）
+
+Python 中的 list 實際上就是一個動態陣列。
+你可以輕鬆地新增、刪除元素，並且它會自動管理大小。
+每次新增或刪除元素時，list 會根據需要動態調整其大小。
+創建動態陣列
+
+# 創建一個空的動態陣列
+dynamic_arr = []
+
+# 添加元素
+dynamic_arr.append(1)
+dynamic_arr.append(2)
+dynamic_arr.append(3)
+
+print(dynamic_arr)  # 輸出: [1, 2, 3]
+
+# 進行修改
+dynamic_arr[0] = 10
+print(dynamic_arr)  # 輸出: [10, 2, 3]
+
+# 刪除元素
+dynamic_arr.remove(2)
+print(dynamic_arr)  # 輸出: [10, 3]
+
+# 可以動態增加或減少元素
+dynamic_arr.append(4)
+dynamic_arr.append(5)
+print(dynamic_arr)  # 輸出: [10, 3, 4, 5]
+
+動態陣列的自動擴展
+
+在 Python 的 list 中，每當需要擴充時，會以某種策略自動增長其容量。這是一個例子：
+
+dynamic_arr = [1, 2, 3]
+
+# 列表會自動擴展
+dynamic_arr.append(4)  # 添加元素，內部容量會自動擴展
+dynamic_arr.append(5)
+dynamic_arr.append(6)
+
+print(dynamic_arr)  # 輸出: [1, 2, 3, 4, 5, 6]
+-------------------
+演算法
+-------------------
+基本演算法
+
+    排序算法：如氣泡排序、選擇排序、插入排序、快速排序、合併排序等。
+    搜尋算法：例如線性搜尋、二分搜尋。
+    遞歸：學習遞歸問題的解法，這是許多複雜演算法的基礎。
+	
+掌握常見的演算法技巧
+
+    分治法：將問題分解成較小的問題解決，典型例子如快速排序、合併排序。
+    貪心法：逐步做出最優選擇，如最短路徑算法（Dijkstra）。
+    動態規劃：用來解決最優解問題，典型例子如背包問題、斐波那契數列。
+    回溯法：用來解決所有可能解的問題，如八皇后問題。
+-------------------
