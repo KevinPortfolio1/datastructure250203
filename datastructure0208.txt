@@ -1,0 +1,140 @@
+貪心法：逐步做出最優選擇，如最短路徑算法（Dijkstra）。
+-------------------------------------------------------------------
+import heapq
+
+# 定義一個圖，這裡使用字典來表示圖的鄰接表
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'A': 1, 'C': 2, 'D': 5},
+    'C': {'A': 4, 'B': 2, 'D': 1},
+    'D': {'B': 5, 'C': 1}
+}
+
+# Dijkstra 算法
+def dijkstra(graph, start):
+    # 儲存每個節點到起點的最短距離
+    shortest_path = {node: float('inf') for node in graph}
+    shortest_path[start] = 0
+    
+    # 儲存已處理過的節點
+    visited = set()
+    
+    # 使用優先隊列來選擇當前最短的節點
+    priority_queue = [(0, start)]  # (距離, 節點)
+
+    while priority_queue:
+        # 從隊列中取出距離最短的節點
+        current_distance, current_node = heapq.heappop(priority_queue)
+
+        # 如果節點已經處理過，就跳過
+        if current_node in visited:
+            continue
+        visited.add(current_node)
+
+        # 更新相鄰節點的最短距離
+        for neighbor, weight in graph[current_node].items():
+            if neighbor not in visited:
+                new_distance = current_distance + weight
+                if new_distance < shortest_path[neighbor]:
+                    shortest_path[neighbor] = new_distance
+                    heapq.heappush(priority_queue, (new_distance, neighbor))
+
+    return shortest_path
+
+# 測試
+start_node = 'A'
+shortest_paths = dijkstra(graph, start_node)
+
+print(f"從 {start_node} 到其他節點的最短距離：")
+for node, distance in shortest_paths.items():
+    print(f"{start_node} -> {node}: {distance}")
+
+-------------------------------------------------------------------------------------
+動態規劃：用來解決最優解問題，典型例子如背包問題、斐波那契數列。
+
+# 背包問題 - 0/1 背包
+def knapsack(weights, values, capacity):
+    n = len(weights)
+    
+    # dp[i][w] 代表前 i 個物品，在重量不超過 w 的情況下的最大價值
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+
+    # 填充 DP 表
+    for i in range(1, n + 1):
+        for w in range(1, capacity + 1):
+            if weights[i - 1] <= w:
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1])
+            else:
+                dp[i][w] = dp[i - 1][w]
+
+    return dp[n][capacity]
+
+# 測試
+weights = [2, 3, 4, 5]  # 物品的重量
+values = [3, 4, 5, 6]   # 物品的價值
+capacity = 5            # 背包容量
+
+max_value = knapsack(weights, values, capacity)
+print(f"最大價值: {max_value}")
+
+
+
+# 使用動態規劃計算斐波那契數列
+def fibonacci_dp(n):
+    if n <= 1:
+        return n
+    dp = [0] * (n + 1)
+    dp[1] = 1
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
+
+# 測試
+n = 10
+print(f"F({n}) = {fibonacci_dp(n)}")
+
+
+回溯法：用來解決所有可能解的問題，如八皇后問題。
+
+# 八皇后問題 - 回溯法解決
+def is_safe(board, row, col):
+    # 檢查同一列是否有皇后
+    for i in range(row):
+        if board[i] == col or abs(board[i] - col) == abs(i - row):
+            return False
+    return True
+
+def solve_n_queens(n, board, row, solutions):
+    # 當所有皇后都已經放置完成時，保存解
+    if row == n:
+        solutions.append(board[:])  # 保存一個解的副本
+        return
+    
+    # 試著在每一列放置皇后
+    for col in range(n):
+        if is_safe(board, row, col):
+            board[row] = col  # 放置皇后
+            solve_n_queens(n, board, row + 1, solutions)  # 尝试放置下一行的皇后
+            board[row] = -1  # 回溯，撤回放置的皇后
+
+def print_solution(solution):
+    # 輸出每個解的棋盤形式
+    for row in solution:
+        board_row = ['.' for _ in range(len(solution))]
+        board_row[row] = 'Q'  # 放置皇后
+        print(' '.join(board_row))
+    print()
+
+def eight_queens(n):
+    board = [-1] * n  # 初始化棋盤，每個位置的值表示皇后所在的列，-1表示未放置皇后
+    solutions = []
+    solve_n_queens(n, board, 0, solutions)  # 從第0行開始解決問題
+
+    # 輸出所有解
+    print(f"找到 {len(solutions)} 個解:")
+    for solution in solutions:
+        print_solution(solution)
+
+# 測試八皇后問題
+eight_queens(8)
+
