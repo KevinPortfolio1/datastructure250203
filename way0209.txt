@@ -1,0 +1,145 @@
+1. 資料結構與演算法 (Data Structures & Algorithms)
+
+資料結構與演算法是面試的常見考題，尤其是大公司或是科技公司的面試中。你可以針對以下主題進行準備：
+
+    基本資料結構：
+        陣列 (Array)、串列 (Linked List)
+        堆疊 (Stack)、佇列 (Queue)
+        雜湊表 (Hash Table)、字典 (Dictionary)
+        樹狀結構 (Tree)、二叉樹 (Binary Tree)
+        圖形結構 (Graph)
+    演算法：
+        排序 (Sorting)：快排 (Quick Sort)、歸併排序 (Merge Sort)、插入排序 (Insertion Sort)
+        查找 (Searching)：二分搜尋 (Binary Search)
+        動態規劃 (Dynamic Programming)
+        貪心演算法 (Greedy Algorithm)
+        深度與廣度優先搜尋 (DFS, BFS)
+    時間與空間複雜度分析：
+        了解如何分析算法的效率 (Big-O Notation)
+
+2. 編程語言 (Programming Languages)
+
+在台灣的程式設計師面試中，雖然有些公司會專注於某種編程語言，但以下語言是較常見的選擇：
+
+    Python：簡潔且容易上手，常用於資料處理、機器學習等領域。
+    Java：廣泛應用於企業級應用系統開發。
+    C/C++：在需要高效能的應用程式（如遊戲開發、系統程式等）中使用。
+    JavaScript/TypeScript：如果你想往前端或全端開發發展，這兩種語言是必須熟悉的。
+    Go, Rust：這些新興語言在一些較注重效能和系統開發的公司中也越來越受歡迎。
+
+除了語言本身，還需要了解語言的基本庫和框架。
+例如：Python的 requests、Java的 Spring、Node.js的 Express 等。
+
+
+3. 版本控制 (Version Control)
+
+了解 Git 是非常重要的，尤其是在現代的軟體開發環境中。你需要掌握的基本 Git 操作包括：
+
+    git clone、git commit、git push、git pull
+    分支管理：git branch、git merge、git rebase
+    解決衝突 (merge conflict)
+
+4. 網頁開發基礎 (Web Development Basics)
+
+如果你的面試是針對前端或後端開發職位，你需要掌握以下技術：
+
+    前端：
+        HTML/CSS：基本的頁面結構和樣式設計
+        JavaScript：基本語法、事件處理、DOM 操作
+        前端框架：React、Vue、Angular
+    後端：
+        RESTful API 設計
+        伺服器架設：Node.js、Flask、Django 等
+        資料庫：MySQL、PostgreSQL、MongoDB 等
+    全端開發：
+        Node.js 或其他後端框架配合前端框架（例如 React 或 Vue）
+
+5. 基本的系統設計 (System Design)
+
+系統設計是較進階的主題，適用於有一定經驗的開發者。不過，對於新手而言，理解以下概念也很有幫助：
+
+    高可用性與擴展性設計
+    資料庫設計與正規化
+    雲端服務與分散式系統基本架構（如 AWS, GCP）
+
+6. 常見面試題目類型
+
+    問題解決：例如：字串處理、數組操作、二維陣列問題等。
+    邏輯推理：面試官會給你一些場景，要求你從邏輯角度解決問題。
+    實作測試：可能會要求你在面試中寫代碼或完成小型專案。
+
+7. 軟技能與團隊合作
+
+    溝通能力：解釋自己的思路、討論問題的過程、與團隊協作。
+    學習態度：作為新手程式設計師，顯示你有持續學習的熱忱會給你加分。
+
+8. 其他工具與框架
+
+    Docker：了解容器技術對於部署應用程式有很大的幫助。
+    CI/CD 流程：學習如何自動化測試與部署過程。
+    測試框架：了解單元測試（Unit Testing）與端對端測試（E2E Testing）。
+	
+----------------------------------------------------------------------------------------------------------------------
+	
+1. 雲端運算 (Cloud Computing)
+
+雲端運算是指透過網路（即「雲端」）提供的遠端伺服器來儲存、管理和處理數據，而非依賴本地設備或伺服器。
+雲端運算的核心理念是將硬體和軟體資源虛擬化，讓用戶可以根據需求獲得即時的資源，並且按使用量付費。
+
+雲端運算的主要特點：
+
+    按需付費：根據使用量進行計費，降低企業的硬體投資成本。
+    彈性擴展：能根據需求動態擴展或縮減資源。
+    高可用性：雲端服務通常提供高可用性，並有多層備援機制。
+    全球覆蓋：許多雲端服務商提供全球的資料中心，讓用戶可以選擇最適合的位置。
+
+雲端運算有三種主要服務模式：
+
+    基礎設施即服務 (IaaS, Infrastructure as a Service)：
+	提供基本的計算資源，如虛擬機、儲存和網路，讓使用者可以自由搭建自己的 IT 基礎設施。
+    平台即服務 (PaaS, Platform as a Service)：
+	提供開發平台與工具，幫助開發者構建和運行應用程式，無需關注底層基礎設施。
+    軟體即服務 (SaaS, Software as a Service)：
+	提供已經構建好的應用程式，使用者只需通過網路使用，不需管理底層的硬體或軟體。
+
+2. AWS (Amazon Web Services)
+
+AWS 是亞馬遜提供的雲端服務平台，是全球最大的公共雲服務提供商之一，提供多種雲端運算服務，
+幫助企業、開發者及組織實現基礎設施的虛擬化、擴展、儲存及管理。
+
+AWS的主要服務組成：
+
+    計算服務：
+	如 EC2 (Elastic Compute Cloud)，提供可擴展的虛擬伺服器。
+    儲存服務：
+	如 S3 (Simple Storage Service)，提供可靠的物件儲存服務，適合存儲大量資料。
+    資料庫服務：
+	如 RDS (Relational Database Service)，提供管理型的關聯資料庫服務，支持 MySQL、PostgreSQL、MariaDB 等資料庫。
+    網路服務：
+	如 VPC (Virtual Private Cloud)，提供虛擬私有網路，實現安全的網路架構。
+    機器學習：
+	AWS 提供多種機器學習服務與工具，如 SageMaker，用於建立、訓練和部署機器學習模型。
+    開發工具：
+	如 AWS Lambda，支援無伺服器運算 (serverless)，可以只專注於寫代碼而不需要管理伺服器。
+
+AWS 也提供許多其他專業服務，如監控、分析、AI、區塊鏈服務等，並且在全球擁有大量的資料中心。
+
+3. GCP (Google Cloud Platform)
+
+GCP 是 Google 提供的雲端平台，除了具備與 AWS 相似的基礎設施外，還有許多 Google 自家的特色服務，
+特別是在大數據處理、機器學習及人工智慧領域上，GCP 表現非常出色。
+
+GCP 的主要服務組成：
+
+    計算服務：
+	如 Compute Engine，提供虛擬機器服務；Google Kubernetes Engine (GKE)，提供容器化應用的管理服務。
+    儲存服務：
+	如 Cloud Storage，提供高效能、可靠的物件儲存服務；Bigtable 和 Cloud SQL，分別針對大數據和關聯資料庫的儲存需求。
+    資料庫服務：
+	如 Cloud Spanner，提供分佈式的關聯資料庫，支持自動擴展與高可用性。
+    大數據與分析：
+	GCP 擅長於大數據處理和即時數據分析，主要的服務包括 BigQuery（大數據查詢與分析平台）和 Pub/Sub（即時訊息傳遞系統）。
+    機器學習：
+	GCP 提供 TensorFlow、AI Platform 和 AutoML 服務，支持深度學習模型的建立與訓練，並提供強大的人工智慧服務。
+    開發者工具：
+	如 Cloud Functions，支持無伺服器運算；Firebase，針對行動應用提供後端服務，讓開發者能快速構建應用。
